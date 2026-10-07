@@ -43,7 +43,7 @@ function getEmailConfig(): {
 } {
   const env = getEnv();
   const envEmail = env.EMAIL_FROM;
-  const isDev = env.NODE_ENV === 'development';
+  const isDev = import.meta.env.DEV || env.NODE_ENV === 'development';
   const appName = getAppName();
 
   if (envEmail) {
@@ -54,7 +54,7 @@ function getEmailConfig(): {
     // Local dev simulates sends (the binding has no `remote` flag in the
     // default wrangler.jsonc block), so the sender never reaches a real
     // mailbox — any placeholder address works.
-    return { fromEmail: 'dev@localhost', fromName: appName };
+    return { fromEmail: 'dev@example.com', fromName: appName };
   }
 
   throw new Error(

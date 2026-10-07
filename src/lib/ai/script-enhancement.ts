@@ -192,7 +192,8 @@ export async function* streamScriptEnhancement(
   // search and OpenRouter executes it server-side within the agent loop.
   // Gate it out of E2E entirely (record + replay): live search results would
   // make the recorded OpenRouter request/response non-deterministic.
-  const useWebSearch = getEnv().E2E_TEST !== 'true';
+  const useWebSearch =
+    getEnv().E2E_TEST !== 'true' && Boolean(getEnv().OPENROUTER_KEY);
   let totalCost: Microdollars = ZERO_MICROS;
 
   async function* generate(turnMessages: ChatMessage[]) {

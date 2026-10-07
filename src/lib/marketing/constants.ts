@@ -1,4 +1,4 @@
-const APP_NAME = import.meta.env.VITE_APP_NAME || 'OpenStory';
+const APP_NAME = import.meta.env.VITE_APP_NAME || 'Vidmint';
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://openstory.so';
 const VITE_R2_PUBLIC_ASSETS_DOMAIN =
   import.meta.env.VITE_R2_PUBLIC_ASSETS_DOMAIN || 'assets.openstory.so';

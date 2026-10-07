@@ -92,21 +92,23 @@ export function UserSidebarFooter() {
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton
             size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            className="h-11 rounded-xl p-1.5 hover:bg-white/[0.06] data-[state=open]:bg-white/[0.08] transition-all border border-transparent hover:border-white/[0.06]"
           >
-            <Avatar className="h-8 w-8 rounded-lg">
+            <Avatar className="h-8 w-8 rounded-lg ring-1 ring-cyan-500/30">
               <AvatarImage src={user.image || undefined} alt={displayName} />
-              <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+              <AvatarFallback className="rounded-lg bg-gradient-to-br from-cyan-950 via-slate-900 to-purple-950 text-cyan-300 font-bold text-xs">
+                {initials}
+              </AvatarFallback>
             </Avatar>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{displayName}</span>
+            <div className="grid flex-1 text-left text-xs leading-tight">
+              <span className="truncate font-semibold text-zinc-100">{displayName}</span>
               {userEmail && (
-                <span className="truncate text-xs text-muted-foreground">
+                <span className="truncate text-[11px] text-zinc-400">
                   {userEmail}
                 </span>
               )}
             </div>
-            <ChevronsUpDown className="ml-auto size-4" />
+            <ChevronsUpDown className="ml-auto size-3.5 text-zinc-500" />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent

@@ -47,11 +47,11 @@
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
   --ring: oklch(0.439 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.68 0.19 195);
+  --chart-2: oklch(0.60 0.22 250);
+  --chart-3: oklch(0.58 0.24 290);
+  --chart-4: oklch(0.72 0.16 170);
+  --chart-5: oklch(0.65 0.20 220);
   --sidebar: oklch(0.145 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.985 0 0);
@@ -73,9 +73,13 @@
   --shadow-blur: 24px;
   --shadow-spread: -12px;
   --shadow-opacity: 0.5;
-  --color-violet: #a770ef;
-  --color-coral: #fb7185;
-  --color-peach: #fdb99b;
+  --color-mint: #00dfe5;
+  --color-cyan: #00d2d3;
+  --color-blue: #0084ff;
+  --color-purple: #7c3aed;
+  --color-violet: #8b5cf6;
+  --color-coral: #00dfe5;
+  --color-peach: #00d2d3;
   --shadow-color: #0a0a0a;
   --shadow-2xs: 0px 2px 8px -4px hsl(0 0% 2% / 0.2);
   --shadow-xs: 0px 4px 12px -6px hsl(0 0% 2% / 0.3);
@@ -132,6 +136,10 @@
   --color-card-gradient-to: var(--card-gradient-to);
   --color-card-accent: var(--card-accent);
 
+  --color-mint: var(--color-mint);
+  --color-cyan: var(--color-cyan);
+  --color-blue: var(--color-blue);
+  --color-purple: var(--color-purple);
   --color-violet: var(--color-violet);
   --color-coral: var(--color-coral);
   --color-peach: var(--color-peach);
@@ -370,4 +378,16 @@ body {
     animation: none;
     opacity: 1;
   }
+}
+
+/* Forcibly hide any injected trigger mark elements */
+[id*="tsd-trigger"],
+[fill*="tsd-trigger"],
+svg:has([fill*="tsd-trigger"]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }

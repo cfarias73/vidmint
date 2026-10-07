@@ -101,14 +101,15 @@ export const CreditBalancePill: React.FC = () => {
           onClick={() => openAddCreditsDialog('sidebar_pill')}
           aria-label={`Credit balance ${amount}. Add credits.`}
           className={cn(
+            'h-9 px-3 rounded-xl bg-zinc-900/80 border border-white/[0.06] hover:border-cyan-500/30 hover:bg-zinc-800/90 transition-all text-zinc-300 font-medium',
             'animate-[balance-flash-in_300ms_ease-out_both]',
             toneClass
           )}
         >
-          <Wallet />
+          <Wallet className="size-4 text-cyan-400 shrink-0" />
           {/* Amount hides in icon mode via SidebarMenuButton truncation
               (span:last-child); tooltip carries the full amount. */}
-          <span className="tabular-nums" aria-live="polite">
+          <span className="tabular-nums font-mono text-xs font-semibold text-zinc-200" aria-live="polite">
             {amount}
           </span>
         </SidebarMenuButton>

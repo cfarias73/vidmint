@@ -510,6 +510,7 @@ type ChatRoute = 'xai' | 'google' | 'openrouter';
  */
 function buildTools(params: LLMRequestParams, route: ChatRoute) {
   if (!params.webSearch) return undefined;
+  if (params.apiKey?.via === 'fal') return undefined;
   if (route === 'xai') return [grokWebSearchTool()];
   if (route === 'google') return [googleSearchTool()];
   const opts = params.webSearch === true ? {} : params.webSearch;

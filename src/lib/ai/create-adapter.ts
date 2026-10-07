@@ -83,6 +83,9 @@ export function getPlatformLlmKey(
   if (env.OPENROUTER_KEY) {
     return { key: env.OPENROUTER_KEY, via: 'openrouter', source: 'platform' };
   }
+  if (env.GEMINI_API_KEY) {
+    return { key: env.GEMINI_API_KEY, via: 'google', source: 'platform' };
+  }
   if (env.FAL_KEY) {
     return { key: env.FAL_KEY, via: 'fal', source: 'platform' };
   }
@@ -153,7 +156,7 @@ export function resolveNativeGeminiModel(
 ): NativeGeminiTextModel | undefined {
   const resolved = keyInfo ?? getPlatformLlmKey(model);
   if (resolved?.via !== 'google' || !resolved.key) return undefined;
-  return nativeGeminiTextModel(model);
+  return nativeGeminiTextModel(model) ?? 'gemini-3.7-flash';
 }
 
 // Callers must say which API a key belongs to (`via`) — a bare string can't:

@@ -43,14 +43,9 @@ export function AutoStyleTile({
       aria-label="Match script: derive a style from the script"
       title="Derive a style from the script. It stays with this sequence until you add it to your library."
     >
-      <img
-        src="/match-script.jpg"
-        width={130}
-        height={130}
-        alt=""
-        className="h-full w-full object-cover"
-        decoding="async"
-      />
+      <div className="h-full w-full bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-900 flex items-center justify-center">
+        <ScrollText className="size-6 text-primary/70" />
+      </div>
       <span
         aria-hidden
         className="absolute left-1.5 top-1.5 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"

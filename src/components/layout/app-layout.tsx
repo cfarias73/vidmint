@@ -32,11 +32,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
             <AddCreditsDialog />
             <GlobalBillingGateDialog />
             <SidebarInset className="min-w-0 min-h-0">
-              <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
-                <SidebarTrigger className="-ml-1" />
+              <header className="flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-zinc-950/40 backdrop-blur-md px-4">
+                <SidebarTrigger className="-ml-1 hover:bg-white/[0.06] rounded-lg transition-colors" />
                 <Separator
                   orientation="vertical"
-                  className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+                  className="mr-2 data-vertical:h-4 data-vertical:self-auto bg-white/[0.08]"
                 />
                 <div className="min-w-0 flex-1">
                   <Breadcrumbs />
