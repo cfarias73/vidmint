@@ -65,7 +65,9 @@ function LandingRootPage() {
             {/* Top Pill */}
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-4 py-1.5 text-xs sm:text-sm font-medium text-cyan-300 backdrop-blur-xl shadow-[0_0_20px_rgba(0,223,229,0.15)] mb-8 animate-in fade-in slide-in-from-bottom-3 duration-700">
               <Sparkles className="size-4 text-cyan-400 animate-spin-slow" />
-              <span className="tracking-wide">Next-Generation Generative AI Cinema Engine</span>
+              <span className="tracking-wide">
+                Next-Generation Generative AI Cinema Engine
+              </span>
             </div>
 
             {/* Majestic Hero Headline */}
@@ -79,7 +81,9 @@ function LandingRootPage() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed mb-10 text-pretty">
-              Create multi-scene cinematic sequences with rock-solid character consistency, synchronized multitrack audio, and intelligent screenplay beat breakdowns.
+              Create multi-scene cinematic sequences with rock-solid character
+              consistency, synchronized multitrack audio, and intelligent
+              screenplay beat breakdowns.
             </p>
 
             {/* Dual Action CTAs */}
@@ -109,14 +113,19 @@ function LandingRootPage() {
             </div>
 
             {/* Interactive Live Studio Composer in Hero */}
-            <div className="max-w-4xl mx-auto text-left scroll-mt-24" id="compose">
+            <div
+              className="max-w-4xl mx-auto text-left scroll-mt-24"
+              id="compose"
+            >
               <div className="relative rounded-3xl border border-white/[0.12] bg-zinc-950/70 p-4 sm:p-6 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.6)] ring-1 ring-white/[0.05]">
                 <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/[0.06]">
                   <div className="flex items-center gap-2.5">
                     <div className="size-3 rounded-full bg-red-500/80" />
                     <div className="size-3 rounded-full bg-yellow-500/80" />
                     <div className="size-3 rounded-full bg-green-500/80" />
-                    <span className="ml-2 text-xs font-mono text-zinc-400">interactive_studio_cockpit.tsx</span>
+                    <span className="ml-2 text-xs font-mono text-zinc-400">
+                      interactive_studio_cockpit.tsx
+                    </span>
                   </div>
                   <div className="inline-flex items-center gap-1.5 text-xs text-cyan-400/90 font-medium">
                     <Film className="size-3.5" />
@@ -154,7 +163,8 @@ function LandingRootPage() {
                   Ready to Direct Your First Masterpiece?
                 </h2>
                 <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
-                  Join thousands of filmmakers, studios, and creators producing high-fidelity generative cinema with OpenStory.
+                  Join thousands of filmmakers, studios, and creators producing
+                  high-fidelity generative cinema with OpenStory.
                 </p>
                 <div className="pt-2">
                   <Button
