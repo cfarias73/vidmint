@@ -1611,6 +1611,48 @@ export const ScriptView: FC<{
               mentionItems={mentionItems}
             />
           </div>
+          {!scriptValue && !loading && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+              <span className="text-[11px] font-medium text-zinc-500 flex items-center gap-1">
+                <Sparkles className="size-3 text-cyan-400/70" />
+                <span>Try prompt:</span>
+              </span>
+              {[
+                {
+                  label: '🎬 Neo-Noir Cyberpunk',
+                  prompt:
+                    'A lone investigator stands under flickering holographic billboards in a rain-drenched cyberpunk alley, discovering a glowing data shard.',
+                },
+                {
+                  label: '🪐 Deep Space Station',
+                  prompt:
+                    'An astronaut outside a massive orbital station watches in awe as an ancient interstellar portal pulses with electric purple energy.',
+                },
+                {
+                  label: '🌸 Anime Blade Duel',
+                  prompt:
+                    'Two masked warriors clash swords atop a misty mountain shrine as glowing cherry blossom petals swirl in the wind.',
+                },
+                {
+                  label: '🎥 35mm Vintage Cinema',
+                  prompt:
+                    'Warm golden hour lighting in 1970s Rome, an artist sketches an intriguing stranger across a bustling vintage café terrace.',
+                },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => {
+                    setScript(item.prompt);
+                    if (canUndoEnhance) setEnhance('canUndoEnhance', false);
+                  }}
+                  className="rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-0.5 text-[11px] font-medium text-zinc-400 hover:border-cyan-500/40 hover:bg-cyan-500/10 hover:text-cyan-300 transition-all shadow-2xs"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
           {enhanceError && (
             <p className="text-sm text-destructive">{enhanceError}</p>
           )}

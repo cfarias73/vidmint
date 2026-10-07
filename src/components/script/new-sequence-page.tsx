@@ -240,20 +240,33 @@ export function NewSequencePage({
     );
   }
 
-  // Signed-in: same left one-liner as Sequences / Images / Models, then the
-  // script box. Logged-out: logo + centered tagline + composer.
+  // Signed-in: full-featured studio cockpit with elegant header and bounded composer
   if (user) {
     return (
-      <div className="flex h-full flex-col overflow-hidden">
+      <div className="h-full">
         {billingGate}
-        <PageIntro title={SITE_CONFIG.tagline} maxWidth="narrow">
-          {SITE_CONFIG.taglineSub}
-        </PageIntro>
         <PageContainer
           maxWidth="narrow"
-          padding="none"
-          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+          padding="compact"
+          fullHeight
+          className="space-y-3 sm:space-y-4 short-h:space-y-2 py-3 sm:py-5"
         >
+          <div className="flex shrink-0 flex-col items-center gap-1.5 sm:gap-2">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-0.5 text-[11px] font-semibold text-cyan-300 backdrop-blur-md shadow-[0_0_12px_rgba(0,223,229,0.1)]">
+              <Sparkles className="size-3 text-cyan-400" />
+              <span className="tracking-wide">AI Cinema Studio</span>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+                {SITE_CONFIG.tagline}
+              </h1>
+              <p className="text-xs sm:text-sm text-zinc-400 max-w-md">
+                {SITE_CONFIG.taglineSub}
+              </p>
+            </div>
+          </div>
+
           <div className="flex min-h-0 flex-1 flex-col">
             <ScriptView
               key={from ? `copy:${from}` : composerKey}

@@ -32,13 +32,18 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
             <AddCreditsDialog />
             <GlobalBillingGateDialog />
             <SidebarInset className="relative min-w-0 min-h-0 bg-background overflow-hidden">
-              {/* Studio ambient backdrop glow */}
+              {/* Studio ambient backdrop glow & grid */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
               >
-                <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[550px] rounded-full bg-gradient-to-b from-cyan-500/[0.08] via-purple-600/[0.05] to-transparent blur-3xl opacity-80" />
-                <div className="absolute bottom-[-15%] right-[-5%] w-[600px] h-[500px] rounded-full bg-indigo-600/[0.04] blur-3xl" />
+                {/* Tech grid texture with radial fade */}
+                <div className="absolute inset-0 studio-grid-pattern [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,#000_60%,transparent_100%)] opacity-40" />
+                {/* Primary cyan/violet aurora beam */}
+                <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[1100px] h-[650px] rounded-full bg-gradient-to-b from-cyan-500/[0.12] via-purple-600/[0.08] to-transparent blur-3xl animate-pulse-glow" />
+                {/* Secondary subtle rim lighting */}
+                <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[500px] rounded-full bg-cyan-600/[0.05] blur-3xl" />
+                <div className="absolute top-[30%] right-[-10%] w-[650px] h-[550px] rounded-full bg-purple-600/[0.05] blur-3xl" />
               </div>
 
               <header className="relative z-10 flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-zinc-950/40 backdrop-blur-md px-4">
