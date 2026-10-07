@@ -227,13 +227,7 @@ export function NewSequencePage({
     />
   );
 
-  // Copy mode MUST wait for the source sequence before mounting the composer:
-  // ScriptView seeds script, style, aspect ratio and models in `useState`
-  // initialisers, and nothing re-syncs them afterwards. Mounted early it would
-  // latch onto create defaults — empty script, Automatic — and still offer
-  // "Generate Copy", producing a copy of nothing. Navigating from the sequence
-  // hides this (its detail query is already cached); a direct link or a reload
-  // does not.
+  // Copy mode or explicit sequence create alias (/sequences/new): pure workspace cockpit
   if (from && !sourceSequence) {
     return (
       <div className="h-full">
@@ -245,8 +239,8 @@ export function NewSequencePage({
     );
   }
 
-  // Signed-in: full-featured studio cockpit with elegant header and bounded composer
-  if (user) {
+  // Pure workspace mode only when explicitly on `/sequences/new` with a copy source
+  if (from) {
     return (
       <div className="h-full">
         {billingGate}
@@ -259,31 +253,24 @@ export function NewSequencePage({
           <div className="flex shrink-0 flex-col items-center gap-1.5 sm:gap-2">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-0.5 text-[11px] font-semibold text-cyan-300 backdrop-blur-md shadow-[0_0_12px_rgba(0,223,229,0.1)]">
               <Sparkles className="size-3 text-cyan-400" />
-              <span className="tracking-wide">AI Cinema Studio</span>
+              <span className="tracking-wide">Sequence Studio</span>
             </div>
 
             <div className="flex flex-col items-center text-center">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-                {SITE_CONFIG.tagline}
+                Duplicate & Remaster Sequence
               </h1>
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-md">
-                {SITE_CONFIG.taglineSub}
-              </p>
             </div>
           </div>
 
           <div className="flex min-h-0 flex-1 flex-col">
             <ScriptView
-              key={from ? `copy:${from}` : composerKey}
+              key={`copy:${from}`}
               loading={false}
               onSuccess={handleSuccess}
               sequence={sourceSequence}
-              allowScriptEdit={!!from}
+              allowScriptEdit={true}
               onCancel={handleCancelCopy}
-              initialScript={from ? undefined : seedScript}
-              initialStyleId={from ? undefined : seedStyleId}
-              initialScriptIsSample={!from && !!seedScript}
-              onStyleChange={from ? undefined : handleStyleChange}
             />
           </div>
         </PageContainer>
@@ -291,7 +278,7 @@ export function NewSequencePage({
     );
   }
 
-  // Logged-out & Marketing Landing: Hero + Live Studio Composer + Showcase + Bento Features + Workflow + Pricing + Footer
+  // World-Class Cinematic Landing Page: Hero + Live Studio Cockpit + Showreel + Bento Features + Workflow + Pricing + Footer
   return (
     <div className="min-h-full flex flex-col">
       {billingGate}
