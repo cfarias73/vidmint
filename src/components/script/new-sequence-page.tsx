@@ -15,6 +15,11 @@ import { styleSlug } from '@/lib/style/style-slug';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { LandingShowcase } from '@/components/landing/landing-showcase';
+import { LandingBentoFeatures } from '@/components/landing/landing-bento-features';
+import { LandingHowItWorks } from '@/components/landing/landing-how-it-works';
+import { LandingPricingPreview } from '@/components/landing/landing-pricing-preview';
+import { LandingFooter } from '@/components/landing/landing-footer';
 
 const BILLING_PROMPT_KEY = 'openstory:billing-prompt-dismissed';
 const BILLING_PROMPT_EXPIRY_DAYS = 1;
@@ -286,64 +291,67 @@ export function NewSequencePage({
     );
   }
 
-  // Logged-out: marketing lead-in + composer. The viewport-bounded layout
-  // (`fullHeight` + `flex-1` wrapper) gives the card's `max-h-full` a real
-  // bound, so it sizes to content but never extends past the viewport bottom —
-  // a large paste scrolls inside the editor (#1000).
+  // Logged-out & Marketing Landing: Hero + Live Studio Composer + Showcase + Bento Features + Workflow + Pricing + Footer
   return (
-    <div className="h-full">
+    <div className="min-h-full flex flex-col">
       {billingGate}
-      <PageContainer
-        maxWidth="narrow"
-        padding="spacious"
-        fullHeight
-        // Phones: every row saved here goes to the script editor inside the
-        // height-bounded composer below. short-h (≤800px tall): same idea on
-        // 1280×720 laptops — the editor was collapsing to 0.
-        className="space-y-4 sm:space-y-6 short-h:space-y-3 short-h:py-4 sm:short-h:py-4"
-      >
-        <div className="flex shrink-0 flex-col items-center gap-2 sm:gap-3 short-h:gap-1">
-          {/* Subtle studio pill */}
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-300 backdrop-blur-md shadow-[0_0_15px_rgba(0,223,229,0.12)]">
-            <Sparkles className="size-3 text-cyan-400" />
-            <span className="tracking-wide">AI Cinema Engine</span>
+      <div className="w-full flex-1 flex flex-col justify-center py-6 sm:py-10">
+        <PageContainer
+          maxWidth="narrow"
+          padding="none"
+          className="space-y-6 px-4 sm:px-6"
+        >
+          <div className="flex shrink-0 flex-col items-center gap-3">
+            {/* Subtle studio pill */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1 text-xs font-semibold text-cyan-300 backdrop-blur-md shadow-[0_0_15px_rgba(0,223,229,0.15)]">
+              <Sparkles className="size-3.5 text-cyan-400" />
+              <span className="tracking-wide">
+                Next-Gen Generative AI Cinema
+              </span>
+            </div>
+
+            <OpenStoryLogo size="lg" className="h-8 sm:h-11" />
+
+            <div className="flex flex-col items-center gap-2">
+              <h1 className="text-center text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+                Turn Scripts into Complete Cinematic Films
+              </h1>
+              <p className="text-center text-sm sm:text-base text-zinc-400 text-pretty max-w-xl leading-relaxed">
+                Consistent characters, synchronized multitrack audio, and
+                multi-scene direction in one studio cockpit.
+              </p>
+            </div>
           </div>
 
-          <OpenStoryLogo className="h-7 sm:h-10 short-h:h-7" />
-
-          <div className="flex flex-col items-center gap-1.5">
-            <h1 className="text-center text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
-              {SITE_CONFIG.tagline}
-            </h1>
-            <p className="text-center text-sm sm:text-base text-zinc-400 text-pretty max-w-lg leading-relaxed">
-              {SITE_CONFIG.taglineSub}
-            </p>
+          {/* `#compose` target */}
+          <div id="compose" className="flex min-h-0 flex-col scroll-mt-4">
+            <ScriptView
+              key={composerKey}
+              loading={false}
+              onSuccess={handleSuccess}
+              initialScript={seedScript}
+              initialStyleId={seedStyleId}
+              initialScriptIsSample={!!seedScript}
+              onStyleChange={handleStyleChange}
+            />
           </div>
-        </div>
-        {/* `#compose` target: the gallery "Try" links navigate here so the
-            router scrolls the composer into view (scrollRestoration handles
-            it). */}
-        <div id="compose" className="flex min-h-0 flex-1 flex-col scroll-mt-4">
-          <ScriptView
-            key={composerKey}
-            loading={false}
-            onSuccess={handleSuccess}
-            initialScript={seedScript}
-            initialStyleId={seedStyleId}
-            initialScriptIsSample={!!seedScript}
-            onStyleChange={handleStyleChange}
-          />
-          {/* Right under the card (not pinned to the viewport bottom): the
-              card is a sibling flex item that shrinks to fit above this. */}
-          <Link
-            to="/gallery"
-            className="group mt-4 inline-flex shrink-0 items-center justify-center gap-2 self-center rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 text-xs font-medium text-zinc-400 backdrop-blur-md transition-all hover:border-cyan-500/30 hover:bg-white/[0.07] hover:text-zinc-100 hover:shadow-[0_0_15px_rgba(0,223,229,0.1)] short-h:hidden"
-          >
-            <span>Browse community gallery</span>
-            <ArrowRight className="size-3.5 text-cyan-400 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </Link>
-        </div>
-      </PageContainer>
+        </PageContainer>
+      </div>
+
+      {/* Cinematic Showcase Showreel */}
+      <LandingShowcase styles={styles} />
+
+      {/* Bento Grid Core Capabilities */}
+      <LandingBentoFeatures />
+
+      {/* Director Workflow: How it works */}
+      <LandingHowItWorks />
+
+      {/* Transparent Pricing Plans */}
+      <LandingPricingPreview />
+
+      {/* Luxury Studio Footer */}
+      <LandingFooter />
     </div>
   );
 }
