@@ -70,10 +70,7 @@ export const VidmintLogo: React.FC<VidmintLogoProps> = ({
 }) => {
   const iconSize = size ?? 'md';
   return (
-    <div
-      className={cn(vidmintLogoVariants({ size }), className)}
-      {...props}
-    >
+    <div className={cn(vidmintLogoVariants({ size }), className)} {...props}>
       <img
         src="/iconologovidmint.png"
         alt="Vidmint"
@@ -82,7 +79,12 @@ export const VidmintLogo: React.FC<VidmintLogoProps> = ({
           vidmintIconSizes[iconSize]
         )}
       />
-      <span className={cn('leading-none flex items-center', vidmintTextSizes[iconSize])}>
+      <span
+        className={cn(
+          'leading-none flex items-center',
+          vidmintTextSizes[iconSize]
+        )}
+      >
         <span className="text-white drop-shadow-sm font-bold">Vid</span>
         <span className="bg-gradient-to-r from-[#00dfe5] via-[#00c9db] to-[#00b4d8] bg-clip-text text-transparent font-bold">
           mint

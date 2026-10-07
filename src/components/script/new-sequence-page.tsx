@@ -13,7 +13,7 @@ import { AUTO_STYLE_ID } from '@/lib/style/auto-style';
 import { briefForStyle } from '@/lib/style/brief-for-style';
 import { styleSlug } from '@/lib/style/style-slug';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const BILLING_PROMPT_KEY = 'openstory:billing-prompt-dismissed';
@@ -287,15 +287,22 @@ export function NewSequencePage({
         // Phones: every row saved here goes to the script editor inside the
         // height-bounded composer below. short-h (≤800px tall): same idea on
         // 1280×720 laptops — the editor was collapsing to 0.
-        className="space-y-4 sm:space-y-8 short-h:space-y-3 short-h:py-4 sm:short-h:py-4"
+        className="space-y-4 sm:space-y-6 short-h:space-y-3 short-h:py-4 sm:short-h:py-4"
       >
-        <div className="flex shrink-0 flex-col items-center gap-2 sm:gap-4 short-h:gap-1">
-          <OpenStoryLogo className="h-8 sm:h-12 short-h:h-8" />
-          <div className="flex flex-col items-center gap-1">
-            <h1 className="text-center text-xl font-semibold tracking-tight sm:text-2xl">
+        <div className="flex shrink-0 flex-col items-center gap-2 sm:gap-3 short-h:gap-1">
+          {/* Subtle studio pill */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-300 backdrop-blur-md shadow-[0_0_15px_rgba(0,223,229,0.12)]">
+            <Sparkles className="size-3 text-cyan-400" />
+            <span className="tracking-wide">AI Cinema Engine</span>
+          </div>
+
+          <OpenStoryLogo className="h-7 sm:h-10 short-h:h-7" />
+
+          <div className="flex flex-col items-center gap-1.5">
+            <h1 className="text-center text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
               {SITE_CONFIG.tagline}
             </h1>
-            <p className="text-center text-sm text-muted-foreground text-pretty max-w-md">
+            <p className="text-center text-sm sm:text-base text-zinc-400 text-pretty max-w-lg leading-relaxed">
               {SITE_CONFIG.taglineSub}
             </p>
           </div>
@@ -317,10 +324,10 @@ export function NewSequencePage({
               card is a sibling flex item that shrinks to fit above this. */}
           <Link
             to="/gallery"
-            className="mt-4 inline-flex shrink-0 items-center justify-center gap-1 self-center text-sm font-medium text-muted-foreground hover:text-foreground short-h:hidden"
+            className="group mt-4 inline-flex shrink-0 items-center justify-center gap-2 self-center rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 text-xs font-medium text-zinc-400 backdrop-blur-md transition-all hover:border-cyan-500/30 hover:bg-white/[0.07] hover:text-zinc-100 hover:shadow-[0_0_15px_rgba(0,223,229,0.1)] short-h:hidden"
           >
-            Browse the gallery to see what you can create
-            <ArrowRight className="size-4" />
+            <span>Browse community gallery</span>
+            <ArrowRight className="size-3.5 text-cyan-400 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Link>
         </div>
       </PageContainer>

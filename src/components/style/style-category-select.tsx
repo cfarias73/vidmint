@@ -45,10 +45,11 @@ export function StyleCategorySelect({
           variant="outline"
           size={size}
           disabled={disabled}
+          className="h-8 px-3 rounded-xl gap-1.5 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:border-cyan-500/30 text-zinc-300 transition-all text-xs"
           aria-label={`Style category: ${label}`}
         >
-          <span className="max-w-40 truncate">{label}</span>
-          <ChevronDown className="size-3.5" />
+          <span className="max-w-40 truncate font-medium">{label}</span>
+          <ChevronDown className="size-3.5 text-zinc-400" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">

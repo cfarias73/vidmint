@@ -32,33 +32,33 @@ export function AutoStyleTile({
       disabled={disabled}
       aria-pressed={selected}
       className={cn(
-        'group relative aspect-square overflow-hidden rounded-lg border-2 whitespace-normal',
-        'transition-all duration-200 hover:scale-105 hover:shadow-lg',
-        'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+        'group relative aspect-square overflow-hidden rounded-xl border-2 whitespace-normal',
+        'transition-all duration-200 hover:scale-[1.04] hover:shadow-xl',
+        'focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-zinc-950',
         'disabled:cursor-not-allowed disabled:opacity-50',
         selected
-          ? 'border-primary shadow-md scale-105'
-          : 'border-transparent hover:border-primary/50'
+          ? 'border-cyan-400 shadow-[0_0_22px_rgba(0,223,229,0.4)] ring-1 ring-cyan-400/50 scale-[1.04]'
+          : 'border-white/[0.08] hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(0,223,229,0.15)]'
       )}
       aria-label="Match script: derive a style from the script"
       title="Derive a style from the script. It stays with this sequence until you add it to your library."
     >
-      <div className="h-full w-full bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-900 flex items-center justify-center">
-        <ScrollText className="size-6 text-primary/70" />
+      <div className="h-full w-full bg-gradient-to-br from-indigo-950 via-purple-900 to-cyan-950 flex items-center justify-center">
+        <ScrollText className="size-6 text-cyan-400/80 group-hover:scale-110 transition-transform duration-200" />
       </div>
       <span
         aria-hidden
-        className="absolute left-1.5 top-1.5 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
+        className="absolute left-1.5 top-1.5 flex size-5 items-center justify-center rounded-full bg-cyan-400 text-zinc-950 font-bold shadow-md shadow-cyan-400/30"
       >
         <ScrollText className="size-3" />
       </span>
-      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/60 to-transparent p-2">
-        <p className="line-clamp-2 whitespace-normal text-center text-xs font-medium text-white">
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-1.5 pt-4">
+        <p className="line-clamp-2 whitespace-normal text-center text-[11px] font-semibold text-zinc-100 tracking-tight leading-tight group-hover:text-white transition-colors">
           Match script
         </p>
       </div>
       {selected && (
-        <div className="pointer-events-none absolute inset-0 bg-primary/10" />
+        <div className="pointer-events-none absolute inset-0 bg-cyan-400/10 border border-cyan-400/30 rounded-xl" />
       )}
     </button>
   );

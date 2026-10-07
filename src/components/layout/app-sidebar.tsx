@@ -70,7 +70,10 @@ export function AppSidebar() {
   }, [pathname, isMobile, setOpenMobile]);
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-white/[0.07] bg-zinc-950/95 backdrop-blur-xl">
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-white/[0.07] bg-zinc-950/95 backdrop-blur-xl"
+    >
       <SidebarHeader className="border-b border-white/[0.06] px-3 py-3.5">
         <Link
           to="/"
@@ -107,7 +110,9 @@ export function AppSidebar() {
             )}
           >
             <Plus className="size-4 text-cyan-400 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-90" />
-            <span className="group-data-[collapsible=icon]:hidden font-semibold">New sequence</span>
+            <span className="group-data-[collapsible=icon]:hidden font-semibold">
+              New sequence
+            </span>
           </Link>
         </div>
 

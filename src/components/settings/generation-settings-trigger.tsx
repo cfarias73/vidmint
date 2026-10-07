@@ -32,7 +32,7 @@ export const GenerationSettingsTrigger: FC<GenerationSettingsTriggerProps> = ({
   return (
     <Button
       variant="outline"
-      className="gap-2"
+      className="group h-8 px-3 rounded-xl gap-2 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:border-cyan-500/30 text-zinc-200 shadow-xs transition-all"
       aria-label="Generation settings"
       {...props}
     >
@@ -41,19 +41,21 @@ export const GenerationSettingsTrigger: FC<GenerationSettingsTriggerProps> = ({
           width={aspectRatioData.width}
           height={aspectRatioData.height}
           size="sm"
+          className="text-cyan-400 group-hover:scale-105 transition-transform"
         />
       )}
-      <span className="font-mono text-sm">{aspectRatio}</span>
-      <span className="font-mono text-xs text-muted-foreground">
+      <span className="font-mono text-xs font-semibold text-zinc-200">
+        {aspectRatio}
+      </span>
+      <span className="font-mono text-[11px] text-zinc-400 bg-white/[0.06] px-1.5 py-0.5 rounded-md">
         {RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.label}
       </span>
       {autoLabels.length > 0 && (
-        <span className="hidden sm:inline text-xs text-muted-foreground">
+        <span className="hidden sm:inline text-xs text-cyan-300/80 font-medium">
           {autoLabels.join(' + ')}
         </span>
       )}
-      <SlidersHorizontal className="size-3.5 text-muted-foreground" />
-      <ChevronDown className="size-3.5 text-muted-foreground" />
+      <ChevronDown className="size-3.5 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
     </Button>
   );
 };

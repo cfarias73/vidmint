@@ -109,7 +109,10 @@ export const CreditBalancePill: React.FC = () => {
           <Wallet className="size-4 text-cyan-400 shrink-0" />
           {/* Amount hides in icon mode via SidebarMenuButton truncation
               (span:last-child); tooltip carries the full amount. */}
-          <span className="tabular-nums font-mono text-xs font-semibold text-zinc-200" aria-live="polite">
+          <span
+            className="tabular-nums font-mono text-xs font-semibold text-zinc-200"
+            aria-live="polite"
+          >
             {amount}
           </span>
         </SidebarMenuButton>

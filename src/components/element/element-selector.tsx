@@ -620,12 +620,12 @@ export const ElementSelector: React.FC<ElementSelectorProps> = (props) => {
             variant="outline"
             size="sm"
             disabled={disabled}
-            className="gap-1.5"
+            className="h-8 px-2.5 rounded-xl gap-1.5 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:border-cyan-500/30 text-zinc-300 transition-all text-xs"
           >
-            <ImagePlus className="size-3.5" />
-            Elements
+            <ImagePlus className="size-3.5 text-zinc-400" />
+            <span>Elements</span>
             {count > 0 && (
-              <span className="ml-1 rounded-full bg-primary/10 px-1.5 text-xs">
+              <span className="ml-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-semibold px-1.5 text-[10px]">
                 {count}
               </span>
             )}

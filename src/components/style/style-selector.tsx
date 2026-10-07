@@ -373,21 +373,21 @@ export function StyleSelector({
               tabIndex={moreIndex === focusableIndex ? 0 : -1}
               disabled={disabled}
               className={cn(
-                'aspect-square rounded-lg overflow-hidden',
-                'border-2 border-dashed border-muted-foreground/30',
-                'flex flex-col items-center justify-center gap-2',
-                'hover:border-primary hover:bg-muted/50',
-                'transition-all duration-200',
-                'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                'group aspect-square rounded-xl overflow-hidden',
+                'border border-dashed border-white/[0.12] bg-white/[0.02]',
+                'flex flex-col items-center justify-center gap-1.5 p-1',
+                'hover:border-cyan-400/50 hover:bg-cyan-500/[0.05] hover:shadow-[0_0_15px_rgba(0,223,229,0.12)]',
+                'transition-all duration-200 hover:scale-[1.04]',
+                'focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-zinc-950',
                 'disabled:opacity-50 disabled:cursor-not-allowed'
               )}
               aria-label={`View all ${styles.length} styles`}
             >
-              <MoreHorizontal className="h-5 w-5 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground font-medium text-center">
+              <MoreHorizontal className="size-4 text-zinc-400 group-hover:text-cyan-300 transition-colors" />
+              <span className="text-[11px] text-zinc-400 group-hover:text-zinc-200 font-medium text-center leading-tight">
                 {hiddenCount > 0
                   ? `+${hiddenCount} More`
-                  : `View All (${styles.length})`}
+                  : `All (${styles.length})`}
               </span>
             </button>
           </>

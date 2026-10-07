@@ -31,9 +31,18 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
             <AppSidebar />
             <AddCreditsDialog />
             <GlobalBillingGateDialog />
-            <SidebarInset className="min-w-0 min-h-0">
-              <header className="flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-zinc-950/40 backdrop-blur-md px-4">
-                <SidebarTrigger className="-ml-1 hover:bg-white/[0.06] rounded-lg transition-colors" />
+            <SidebarInset className="relative min-w-0 min-h-0 bg-background overflow-hidden">
+              {/* Studio ambient backdrop glow */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+              >
+                <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[550px] rounded-full bg-gradient-to-b from-cyan-500/[0.08] via-purple-600/[0.05] to-transparent blur-3xl opacity-80" />
+                <div className="absolute bottom-[-15%] right-[-5%] w-[600px] h-[500px] rounded-full bg-indigo-600/[0.04] blur-3xl" />
+              </div>
+
+              <header className="relative z-10 flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.06] bg-zinc-950/40 backdrop-blur-md px-4">
+                <SidebarTrigger className="-ml-1 text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] rounded-lg transition-colors" />
                 <Separator
                   orientation="vertical"
                   className="mr-2 data-vertical:h-4 data-vertical:self-auto bg-white/[0.08]"
@@ -46,7 +55,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
               <InvalidApiKeyBanner />
               <div
                 className={cn(
-                  'flex flex-col flex-1 min-w-0 min-h-0 overflow-x-hidden overflow-y-auto [scrollbar-gutter:stable]',
+                  'relative z-10 flex flex-col flex-1 min-w-0 min-h-0 overflow-x-hidden overflow-y-auto [scrollbar-gutter:stable]',
                   className
                 )}
                 {...props}

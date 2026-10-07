@@ -19,33 +19,46 @@ export const GenerationModeToggle: FC<GenerationModeToggleProps> = ({
   onChange,
   disabled,
 }) => (
-  <ToggleGroup
-    type="single"
-    variant="outline"
-    size="default"
-    spacing={0}
-    value={value}
-    onValueChange={(next) => {
-      if (next === 'quality' || next === 'turbo') onChange(next);
-    }}
-    disabled={disabled}
-    aria-label="Generation mode"
-  >
-    <ToggleGroupItem
-      value="quality"
-      aria-label="Quality mode — quality-recommended defaults"
-      className="gap-1.5 px-2.5"
+  <div className="inline-flex items-center rounded-xl bg-zinc-900/80 border border-white/[0.08] p-0.5 shadow-inner">
+    <button
+      type="button"
+      onClick={() => onChange('quality')}
+      disabled={disabled}
+      aria-label="Quality mode"
+      className={cn(
+        'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200',
+        value === 'quality'
+          ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/30 shadow-[0_0_10px_rgba(0,223,229,0.2)]'
+          : 'text-zinc-400 hover:text-zinc-200 border border-transparent'
+      )}
     >
-      <Gauge className="size-3.5" />
+      <Gauge
+        className={cn(
+          'size-3.5',
+          value === 'quality' ? 'text-cyan-400' : 'text-zinc-400'
+        )}
+      />
       Quality
-    </ToggleGroupItem>
-    <ToggleGroupItem
-      value="turbo"
-      aria-label="Turbo mode — speed-recommended defaults"
-      className="gap-1.5 px-2.5"
+    </button>
+    <button
+      type="button"
+      onClick={() => onChange('turbo')}
+      disabled={disabled}
+      aria-label="Turbo mode"
+      className={cn(
+        'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200',
+        value === 'turbo'
+          ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
+          : 'text-zinc-400 hover:text-zinc-200 border border-transparent'
+      )}
     >
-      <Zap className="size-3.5" />
+      <Zap
+        className={cn(
+          'size-3.5',
+          value === 'turbo' ? 'text-amber-400' : 'text-zinc-400'
+        )}
+      />
       Turbo
-    </ToggleGroupItem>
-  </ToggleGroup>
+    </button>
+  </div>
 );

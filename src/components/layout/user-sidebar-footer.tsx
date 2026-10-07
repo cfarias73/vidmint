@@ -101,7 +101,9 @@ export function UserSidebarFooter() {
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-xs leading-tight">
-              <span className="truncate font-semibold text-zinc-100">{displayName}</span>
+              <span className="truncate font-semibold text-zinc-100">
+                {displayName}
+              </span>
               {userEmail && (
                 <span className="truncate text-[11px] text-zinc-400">
                   {userEmail}

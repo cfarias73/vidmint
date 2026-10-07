@@ -1484,7 +1484,7 @@ export const ScriptView: FC<{
         {/* Control bar. Below md the three reference selectors fold into one "References"
             button that opens a sheet, so the bar is a single row next to the
             settings trigger. */}
-        <CardHeader className="shrink-0 flex flex-row items-center md:flex-col md:items-start lg:flex-row justify-between gap-3 px-6 py-4 border-b border-border/50 bg-card/40 short-h:py-2">
+        <CardHeader className="shrink-0 flex flex-row items-center md:flex-col md:items-start lg:flex-row justify-between gap-3 px-6 py-3 border-b border-white/[0.08] bg-white/[0.02] backdrop-blur-md short-h:py-2">
           <GenerationSettings
             aspectRatio={aspectRatio}
             resolution={resolution}
@@ -1516,7 +1516,7 @@ export const ScriptView: FC<{
           {/* The selectors own their dialogs and the element ref, so they
               mount exactly once: inline on md+, inside the sheet below it.
               Visibility is CSS; only the mount point follows the hook. */}
-          <div className="hidden md:flex items-center gap-2 min-h-10">
+          <div className="hidden md:flex items-center gap-2 min-h-8">
             {!isMobile && referenceSelectors}
           </div>
           <Sheet
@@ -1529,12 +1529,12 @@ export const ScriptView: FC<{
                 variant="outline"
                 size="sm"
                 disabled={loading}
-                className="md:hidden gap-1.5 shrink-0"
+                className="md:hidden h-8 px-2.5 rounded-xl gap-1.5 border-white/[0.08] bg-white/[0.03] text-zinc-300 shrink-0 text-xs"
               >
                 <Library className="size-3.5" />
                 References
                 {referenceCount > 0 && (
-                  <span className="ml-1 rounded-full bg-primary/10 px-1.5 text-xs">
+                  <span className="ml-1 rounded-full bg-cyan-500/20 text-cyan-300 font-semibold px-1.5 text-[10px]">
                     {referenceCount}
                   </span>
                 )}
@@ -1625,16 +1625,16 @@ export const ScriptView: FC<{
               type="button"
               variant="outline"
               size="sm"
-              className="gap-1.5"
+              className="h-8 px-3 rounded-xl gap-1.5 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:border-cyan-500/30 text-zinc-300 transition-all text-xs"
               disabled={
                 loading || currentScriptText.length < 3 || isRecommending
               }
               onClick={triggerRecommend}
             >
               {isRecommending ? (
-                <Loader2 className="size-3.5 animate-spin text-primary" />
+                <Loader2 className="size-3.5 animate-spin text-cyan-400" />
               ) : (
-                <Sparkles className="size-3.5 text-primary" />
+                <Sparkles className="size-3.5 text-cyan-400" />
               )}
               {recommendButtonLabel}
             </Button>
@@ -1646,19 +1646,19 @@ export const ScriptView: FC<{
             />
             {/* CSS-only placement so SSR and hydration match — no useIsMobile
                 gate (that hid Enhance until the client effect ran). */}
-            <div className="ml-auto flex items-center gap-1">
+            <div className="ml-auto flex items-center gap-1.5">
               {!isEditing && (
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="gap-1.5"
+                  className="h-8 px-3 rounded-xl gap-1.5 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:border-cyan-500/30 text-zinc-300 transition-all text-xs"
                   disabled={
                     loading || isEnhancing || isSubmitting || !canShuffle
                   }
                   onClick={requestShuffle}
                 >
-                  <Shuffle className="size-3.5" />
+                  <Shuffle className="size-3.5 text-zinc-400" />
                   Shuffle
                 </Button>
               )}
@@ -1695,18 +1695,24 @@ export const ScriptView: FC<{
           )}
         </div>
 
-        <CardFooter className="shrink-0 flex-col gap-4 border-t border-border/30 bg-transparent px-6 py-3 sm:py-4">
+        <CardFooter className="shrink-0 flex-col gap-4 border-t border-white/[0.08] bg-white/[0.01] px-6 py-3 sm:py-4">
           {/* Footer row - stacks on mobile, inline on desktop */}
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             {/* Meta info - hidden on mobile */}
             <div className="hidden sm:flex items-center gap-4">
-              <span className="text-xs text-muted-foreground flex items-center gap-1">
+              <span className="text-xs text-zinc-400 flex items-center gap-1.5">
                 <KbdGroup>
-                  <Kbd>⌘</Kbd>
-                  <span className="text-muted-foreground">+</span>
-                  <Kbd>⏎</Kbd>
+                  <Kbd className="bg-zinc-900 border border-white/[0.1] text-zinc-300 text-[10px] px-1.5 py-0.5 rounded">
+                    ⌘
+                  </Kbd>
+                  <span className="text-zinc-500">+</span>
+                  <Kbd className="bg-zinc-900 border border-white/[0.1] text-zinc-300 text-[10px] px-1.5 py-0.5 rounded">
+                    ⏎
+                  </Kbd>
                 </KbdGroup>
-                <span className="ml-1">to generate</span>
+                <span className="ml-1 text-zinc-400 font-medium">
+                  to generate
+                </span>
               </span>
             </div>
 
@@ -1731,13 +1737,13 @@ export const ScriptView: FC<{
                 <Button
                   type="submit"
                   disabled={isDisabled}
-                  className="group relative px-6 bg-linear-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground font-semibold tracking-wide shadow-lg shadow-primary/20 hover:shadow-primary/30 overflow-hidden"
+                  className="group relative h-9 px-6 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 text-zinc-950 font-bold tracking-wide shadow-[0_0_20px_rgba(0,223,229,0.35)] hover:shadow-[0_0_30px_rgba(0,223,229,0.55)] hover:brightness-105 active:scale-98 transition-all overflow-hidden border border-cyan-300/60 disabled:opacity-50 disabled:shadow-none"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isSubmitting || isElementBusy ? (
-                      <Loader2 className="size-4 animate-spin" />
+                      <Loader2 className="size-4 animate-spin text-zinc-950" />
                     ) : (
-                      <GenerateSequenceIcon className="size-4" />
+                      <GenerateSequenceIcon className="size-4 text-zinc-950" />
                     )}
                     {isSubmitting
                       ? 'Generating…'
@@ -1748,7 +1754,7 @@ export const ScriptView: FC<{
                           : 'Generate'}
                   </span>
                   {/* Shine effect */}
-                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
                 </Button>
               </div>
               {/* The estimate only exists client-side (pricing query), so it

@@ -177,14 +177,19 @@ export const TalentSuggestionSelector: React.FC<
         {/* Talent button */}
         <Button
           type="button"
-          variant="ghost"
+          variant="outline"
           size="sm"
           onClick={() => setIsDialogOpen(true)}
           disabled={disabled}
-          className="gap-2 text-muted-foreground"
+          className="h-8 px-2.5 rounded-xl gap-1.5 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] hover:border-cyan-500/30 text-zinc-300 transition-all text-xs"
         >
-          <Users className="h-4 w-4" />
+          <Users className="size-3.5 text-zinc-400" />
           <span>Talent</span>
+          {selectedTalent.length > 0 && (
+            <span className="ml-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-semibold px-1.5 text-[10px]">
+              {selectedTalent.length}
+            </span>
+          )}
         </Button>
 
         {/* Selected talent avatars */}
