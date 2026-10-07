@@ -9,13 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppAdminRouteRouteImport } from './routes/_app/admin/route'
 import { Route as AppCreditsRouteImport } from './routes/_app/credits'
 import { Route as AppDeviceRouteImport } from './routes/_app/device'
@@ -95,6 +95,11 @@ import { Route as AppSequencesIdLocationsIndexRouteImport } from './routes/_app/
 import { Route as AppSequencesIdLocationsLocationIdRouteImport } from './routes/_app/sequences/$id/locations/$locationId'
 import { Route as ApiV1SequencesIdExportsRouteImport } from './routes/api/v1/sequences.$id.exports'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -122,11 +127,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppAdminRouteRoute = AppAdminRouteRouteImport.update({
   id: '/admin',
@@ -525,7 +525,7 @@ const ApiV1SequencesIdExportsRoute = ApiV1SequencesIdExportsRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AppIndexRoute
+  '/': typeof IndexRoute
   '/docs': typeof DocsRouteWithChildren
   '/llms.txt': typeof LlmsDottxtRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -610,7 +610,7 @@ export interface FileRoutesByFullPath {
   '/sequences/$id/locations/': typeof AppSequencesIdLocationsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AppIndexRoute
+  '/': typeof IndexRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -694,6 +694,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/docs': typeof DocsRouteWithChildren
@@ -720,7 +721,6 @@ export interface FileRoutesById {
   '/meta/og-github': typeof MetaOgGithubRoute
   '/meta/og-linkedin': typeof MetaOgLinkedinRoute
   '/r2/$': typeof R2SplatRoute
-  '/_app/': typeof AppIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/_app/sequences/$id': typeof AppSequencesIdRouteRouteWithChildren
   '/_app/admin/moderation': typeof AppAdminModerationRoute
@@ -951,6 +951,7 @@ export interface FileRouteTypes {
     | '/sequences/$id/locations'
   id:
     | '__root__'
+    | '/'
     | '/_app'
     | '/_auth'
     | '/docs'
@@ -977,7 +978,6 @@ export interface FileRouteTypes {
     | '/meta/og-github'
     | '/meta/og-linkedin'
     | '/r2/$'
-    | '/_app/'
     | '/docs/'
     | '/_app/sequences/$id'
     | '/_app/admin/moderation'
@@ -1039,6 +1039,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DocsRoute: typeof DocsRouteWithChildren
@@ -1069,6 +1070,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -1110,13 +1118,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_app/': {
-      id: '/_app/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRouteRoute
     }
     '/_app/admin': {
       id: '/_app/admin'
@@ -1737,7 +1738,6 @@ interface AppRouteRouteChildren {
   AppPrivacyRoute: typeof AppPrivacyRoute
   AppReportRoute: typeof AppReportRoute
   AppTermsRoute: typeof AppTermsRoute
-  AppIndexRoute: typeof AppIndexRoute
   AppSequencesIdRouteRoute: typeof AppSequencesIdRouteRouteWithChildren
   AppLocationsLocationIdRoute: typeof AppLocationsLocationIdRoute
   AppModelsSplatRoute: typeof AppModelsSplatRoute
@@ -1764,7 +1764,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppPrivacyRoute: AppPrivacyRoute,
   AppReportRoute: AppReportRoute,
   AppTermsRoute: AppTermsRoute,
-  AppIndexRoute: AppIndexRoute,
   AppSequencesIdRouteRoute: AppSequencesIdRouteRouteWithChildren,
   AppLocationsLocationIdRoute: AppLocationsLocationIdRoute,
   AppModelsSplatRoute: AppModelsSplatRoute,
@@ -1882,6 +1881,7 @@ const ApiV1StylesRouteWithChildren = ApiV1StylesRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DocsRoute: DocsRouteWithChildren,
