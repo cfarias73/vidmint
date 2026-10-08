@@ -83,6 +83,44 @@ async function sendEmail({
 
     const { html, text } = await renderEmail(body);
 
+    const env = getEnv();
+    const resendKey = env.RESEND_API_KEY;
+
+    if (resendKey) {
+      const fromFormatted =
+        fromEmail.includes('@') && !fromEmail.endsWith('@gmail.com')
+          ? `${fromName} <${fromEmail}>`
+          : `${fromName} <onboarding@resend.dev>`;
+
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${resendKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: fromFormatted,
+          to: [to],
+          subject,
+          html,
+          text,
+          ...(replyTo ? { reply_to: replyTo } : {}),
+        }),
+      });
+
+      if (!response.ok) {
+        const errJson = (await response.json().catch(() => ({}))) as {
+          message?: string;
+        };
+        throw new Error(
+          errJson.message || `Resend failed with HTTP ${response.status}`
+        );
+      }
+
+      logger.info('Sent successfully via Resend');
+      return { success: true };
+    }
+
     const result = await getSendEmailBinding().send({
       from: { name: fromName, email: fromEmail },
       to,
@@ -92,7 +130,9 @@ async function sendEmail({
       ...(replyTo ? { replyTo } : {}),
     });
 
-    logger.info('Sent successfully:', { data: result.messageId });
+    logger.info('Sent successfully via Cloudflare SendEmail:', {
+      data: result.messageId,
+    });
     return { success: true };
   } catch (error) {
     logger.error('Failed to send:', { err: error });

@@ -179,9 +179,7 @@ export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
       // Email OTP authentication (passwordless)
       emailOTP({
         otpLength: 6,
-        expiresIn: 300, // 5 minutes
-        // Dev-only fixed code (see devFixedOtp above). Returning undefined
-        // falls back to better-auth's default random generator.
+        expiresIn: 600, // 10 minutes
         generateOTP: (_data, ctx) => devFixedOtp(ctx?.request),
         async sendVerificationOTP({ email, otp, type }) {
           if (type === 'sign-in') {
@@ -189,7 +187,9 @@ export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
             const result = await sendOtpEmail(email, otp);
             if (!result.success) {
               logger.error('Failed to send OTP:', { data: result.error });
-              throw new Error('Failed to send verification code');
+              throw new Error(
+                result.error || 'Failed to send verification code'
+              );
             }
             logger.info('OTP sent successfully');
           }
