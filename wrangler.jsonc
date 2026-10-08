@@ -335,7 +335,7 @@
           // create fresh → run all migrations → import data → update the
           // name + id here.
           "database_name": "openstory-prd",
-          "database_id": "d5981bee-ef84-4006-b585-d1f2ebc81114",
+          "database_id": "93a62727-15a8-4fb3-b229-b255db8aecb5",
           "migrations_dir": "drizzle/migrations-wrangler",
         },
       ],
@@ -542,23 +542,9 @@
           "class_name": "StudioGenerationWorkflow",
         },
       ],
-      // Server-side video export (#968). The `VideoExportContainer` Durable
-      // Object fronts a Cloudflare Container (Node + @mediabunny/server) that
-      // stitches a sequence's scene MP4s for the API. Declared in PRODUCTION
-      // ONLY (not the default/test blocks) so `bun dev` and hermetic e2e need
-      // no Docker — the image is built only on deploy. The
-      // SequenceExportWorkflow tolerates the binding's absence outside prod.
-      "containers": [
-        {
-          "class_name": "VideoExportContainer",
-          "image": "./containers/video-export/Dockerfile",
-          "instance_type": "standard",
-          "max_instances": 3,
-        },
-      ],
       // Realtime broker DO — redeclared because durable_objects + migrations
-      // are non-inheritable across env blocks. Keep the `v1` migration tag in
-      // sync with the top-level block. The container DO is production-only.
+      // are non-inheritable across env blocks. Keep the `v1` and `v2` migration tags in
+      // sync with the published script.
       "durable_objects": {
         "bindings": [
           {
@@ -584,13 +570,7 @@
       "triggers": {
         "crons": ["*/5 * * * *", "17 3 * * *", "37 * * * *"],
       },
-      // Same forwarder as the top-level default — redeclared because
-      // tail_consumers is non-inheritable across env blocks.
-      "tail_consumers": [
-        {
-          "service": "openstory-log-forwarder-prd",
-        },
-      ],
+      "tail_consumers": [],
     },
     // Playwright e2e environment. D1 AND R2 are local (Miniflare) for
     // hermetic runs — no remote bindings, so no Cloudflare credentials are
