@@ -323,6 +323,9 @@
       // `openstory-production`, which is a DIFFERENT worker — the deploy
       // would succeed but the live site would never update.
       "name": "openstory",
+      "vars": {
+        "EMAIL_FROM": "vidmint1@gmail.com"
+      },
       "d1_databases": [
         {
           "binding": "DB",
