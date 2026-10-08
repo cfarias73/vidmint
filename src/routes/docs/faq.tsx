@@ -57,19 +57,50 @@ export const Route = createFileRoute('/docs/faq')({
 
 function FaqArticle() {
   return (
-    <article>
-      <header className="mb-8">
-        <p className="text-sm font-medium text-muted-foreground">Support</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight">{title}</h1>
-        <p className="mt-2 text-lg text-muted-foreground">{description}</p>
+    <article className="space-y-10">
+      <header className="space-y-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+          Support & Help Center
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+          {title}
+        </h1>
+        <p className="text-base text-zinc-400 max-w-2xl">{description}</p>
       </header>
-      <div className="prose dark:prose-invert max-w-none">
+
+      <div className="grid gap-4">
         {FAQ_ITEMS.map((item) => (
-          <section key={item.question}>
-            <h2>{item.question}</h2>
-            <p>{item.answer}</p>
-          </section>
+          <div
+            key={item.question}
+            className="p-6 rounded-2xl bg-zinc-900/60 border border-white/[0.08] hover:border-cyan-500/30 transition-all duration-200 shadow-sm hover:shadow-[0_0_20px_rgba(0,223,229,0.05)] space-y-2.5"
+          >
+            <h2 className="text-lg font-semibold text-zinc-100 flex items-center gap-2.5">
+              <span className="size-1.5 rounded-full bg-cyan-400" />
+              {item.question}
+            </h2>
+            <p className="text-sm text-zinc-300 leading-relaxed pl-4">
+              {item.answer}
+            </p>
+          </div>
         ))}
+      </div>
+
+      {/* Direct Contact Banner */}
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-cyan-950/30 via-zinc-900/80 to-blue-950/30 border border-cyan-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <h3 className="text-base font-semibold text-white">
+            ¿Tienes alguna otra duda o consulta comercial?
+          </h3>
+          <p className="text-xs text-zinc-400">
+            Nuestro equipo de soporte está disponible para asistirte con tu cuenta y configuraciones.
+          </p>
+        </div>
+        <a
+          href="/docs/support/contact-us"
+          className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-semibold text-xs transition-colors shrink-0"
+        >
+          Contactar Soporte
+        </a>
       </div>
     </article>
   );

@@ -5,8 +5,7 @@ import { z } from 'zod';
 const docs = defineCollection({
   name: 'docs',
   directory: './docs',
-  include:
-    '{getting-started,user-guide/**,developer-guide/**,deployment/**,support/**}.md',
+  include: 'support/*.md',
   schema: z.object({
     title: z.string(),
     description: z.string(),
