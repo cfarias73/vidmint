@@ -1,37 +1,35 @@
 ---
 title: Contact Us
-description: Get in touch with the OpenStory team
+description: Get in touch with the Vidmint team
 section: Support
 order: 1
 ---
 
-We're here to help. If you have questions, feedback, or need assistance with your account, get in touch with us directly.
+We're here to help. If you have questions, feedback, or need assistance with your account, get in touch with our team directly.
 
 ## Email Support
 
-For general questions, account issues, or anything else, email us at:
+For general questions, account assistance, custom model inquiries, or technical support, email us at:
 
-[support@openstory.so](mailto:support@openstory.so)
+[support@vidmint.com](mailto:support@vidmint.com)
 
-We aim to respond within one business day.
+Our support team aims to respond within one business day.
 
 ## What to Include
 
 To help us resolve your question quickly, please include:
 
-- A clear description of what you're trying to do
-- Any error messages you've seen (screenshots are great)
-- The URL of the page where the issue happened
-- Your account email, if different from the address you're writing from
+- A clear description of what you're trying to achieve
+- Any error messages you've encountered (screenshots or recordings are helpful)
+- The URL of the sequence or page where the issue happened
+- Your account email address
 
-## Report generated content
+## Feedback & Feature Inquiries
 
-If something generated on OpenStory uses a likeness without permission, impersonates someone, or otherwise violates the law or our Terms — including child sexual abuse material — use the public report form. No account is required:
+We are constantly refining Vidmint's AI generation engine. If you have suggestions for new workflows, camera controls, or model integrations, we’d love to hear from you at [feedback@vidmint.com](mailto:feedback@vidmint.com).
 
-[openstory.so/report](/report)
+## Report Generated Content
 
-That form is the takedown channel. Do not file those reports as GitHub issues.
+If any content generated on Vidmint violates our Terms of Service or copyright policies, please use our public report channel:
 
-## Found a Bug?
-
-If you've spotted a bug or unexpected behavior, please [file an issue](/docs/support/file-an-issue) on GitHub so we can track and fix it.
+[Report Form](/report)

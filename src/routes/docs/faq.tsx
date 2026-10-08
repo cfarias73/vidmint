@@ -3,7 +3,7 @@ import { FAQ_ITEMS, SITE_CONFIG } from '@/lib/marketing/constants';
 
 const title = 'Frequently Asked Questions';
 const description =
-  'Common questions about OpenStory: what it is, pricing, AI model support, API keys, open source licensing, and getting started.';
+  'Common questions about Vidmint: what it is, workflows, AI model support, API keys, and getting started.';
 
 // The FAQ lived on the old marketing homepage; `/` is now the product composer
 // in the app shell, so this docs page is the crawlable home for the answers
@@ -12,7 +12,7 @@ const description =
 export const Route = createFileRoute('/docs/faq')({
   head: () => ({
     meta: [
-      { title: `${title} - OpenStory Docs` },
+      { title: `${title} - Vidmint Docs` },
       { name: 'description', content: description },
     ],
     scripts: [
