@@ -1,6 +1,6 @@
-# 🎬 Vidmint / OpenStory — Guía General y Plan de Pruebas
+# 🎬 Vidmint — Guía General y Plan de Pruebas
 
-Bienvenido a la plataforma de generación y producción de video impulsada por Inteligencia Artificial de **Vidmint / OpenStory**. Este documento resume la visión general de la plataforma, su arquitectura, funcionalidades clave, catálogo de modelos recomendados por niveles de costo y una guía de pruebas paso a paso.
+Bienvenido a la plataforma de generación y producción de video impulsada por Inteligencia Artificial de **Vidmint**. Este documento resume la visión general de la plataforma, su arquitectura, funcionalidades clave, catálogo de modelos recomendados por niveles de costo y una guía de pruebas paso a paso.
 
 ---
 
@@ -123,4 +123,4 @@ Sigue esta secuencia para validar el funcionamiento completo de la plataforma:
 
 ---
 
-*Documento preparado para el equipo de Vidmint / OpenStory.*
+*Documento preparado para el equipo de Vidmint.*
