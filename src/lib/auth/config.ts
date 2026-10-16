@@ -30,9 +30,8 @@ import {
   currentAuthCookiePrefix,
   lastUsedLoginMethodCookieName,
 } from '@/lib/auth/cookie-prefix';
-import { DEV_OTP_CODE } from '@/lib/auth/dev-otp';
 import {
-  isGoogleAuthConfigured,
+  getGoogleAuthCredentials,
   isLocalRequestHost,
 } from '@/lib/utils/environment';
 import { DEVICE_VERIFICATION_PATH } from '@/lib/api-v1/device-auth';
@@ -79,12 +78,6 @@ export function isDevFixedOtpActive(request: Request | undefined): boolean {
   return true;
 }
 
-function devFixedOtp(request: Request | undefined): string | undefined {
-  if (!isDevFixedOtpActive(request)) return undefined;
-  logger.info(`[dev] Sign-in OTP is fixed to ${DEV_OTP_CODE}`);
-  return DEV_OTP_CODE;
-}
-
 // Singleton auth instance cache
 let _authInstance: ReturnType<typeof createAuth> | undefined;
 
@@ -96,6 +89,92 @@ let _authInstance: ReturnType<typeof createAuth> | undefined;
 export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
   const runtimeEnv = getEnv();
   const cookiePrefix = currentAuthCookiePrefix();
+  const googleCredentials = getGoogleAuthCredentials(runtimeEnv);
+  const socialProviders = googleCredentials
+    ? {
+        google: {
+          clientId: googleCredentials.clientId,
+          clientSecret: googleCredentials.clientSecret,
+          enabled: true,
+          overrideUserInfoOnSignIn: true,
+        },
+      }
+    : {};
+
+  // Keep this tuple's individual plugin types intact. If the array is
+  // contextually widened inside `betterAuth({ plugins: [...] })`, TypeScript
+  // loses the plugin-specific endpoints (`deviceCode`, `createApiKey`, etc.)
+  // from `auth.api` and the plugin's additional user fields from `$Infer`.
+  const plugins = [
+    // Email OTP authentication (passwordless)
+    emailOTP({
+      otpLength: 6,
+      expiresIn: 300, // 5 minutes
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === 'sign-in') {
+          logger.info('Sending sign-in OTP', { email });
+          const result = await sendOtpEmail(email, otp);
+          if (!result.success) {
+            logger.error('Failed to send OTP:', { data: result.error });
+            throw new Error(result.error || 'Failed to send verification code');
+          }
+          logger.info('OTP sent successfully');
+        }
+      },
+    }),
+    lastLoginMethod({
+      cookieName: lastUsedLoginMethodCookieName(cookiePrefix),
+    }),
+    passkeyPlugin(),
+    // Device-code login for the public API (#1219, RFC 8628). The plugin
+    // owns the code lifecycle; `src/lib/api-v1/device-auth.ts` wraps it to
+    // hand back an API key instead of a session.
+    deviceAuthorization({
+      expiresIn: '10m',
+      interval: '5s',
+      // Must be absolute: the plugin resolves a relative URI against
+      // `baseURL`, which we leave request-derived (unset) — and server-side
+      // `auth.api.*` calls have no request. The /api/v1 wrapper re-derives
+      // the URL from the live request origin anyway (previews, local ports).
+      verificationUri: new URL(
+        DEVICE_VERIFICATION_PATH,
+        runtimeEnv.VITE_APP_URL || 'http://localhost:3000'
+      ).toString(),
+    }),
+    // Public-API authentication. `enableSessionForAPIKeys` makes the plugin
+    // resolve a full session for the key's owner whenever a request carries a
+    // key header — so the existing `getSession`/`requireUser` path works
+    // transparently for `/api/v1/*` without any bespoke key-hashing. Keys are
+    // prefixed `osk_` (OpenStory Key) and resolve to the creating user via
+    // `referenceId`; the team is derived downstream via `resolveUserTeam`.
+    apiKey({
+      enableSessionForAPIKeys: true,
+      defaultKeyLength: 64,
+      // Per-key rate limit: 10 requests/second. Enforced on every `/api/v1`
+      // request (via the session-from-key validation), stored per key. This
+      // is the abuse throttle, sized to comfortably allow normal create +
+      // status-poll traffic (incl. parallel per-sequence polls); per-team
+      // *cost* is separately bounded by the credit pre-flight in
+      // `createSequences`.
+      rateLimit: {
+        enabled: true,
+        maxRequests: 10,
+        timeWindow: 1000,
+      },
+      // Accept either `x-api-key: <key>` or the conventional
+      // `Authorization: Bearer <key>` header.
+      customAPIKeyGetter: (ctx) => {
+        const authHeader = ctx.headers?.get('authorization');
+        if (authHeader?.startsWith('Bearer ')) {
+          return authHeader.slice('Bearer '.length).trim();
+        }
+        return ctx.headers?.get('x-api-key') ?? null;
+      },
+    }),
+    // TanStack Start cookie integration - must be after all plugins that set cookies
+    // (emailOTP, passkey, lastLoginMethod)
+    tanstackStartCookies(),
+  ];
 
   return betterAuth({
     // Route Better Auth's own logs through LogTape so they land in the same
@@ -163,88 +242,10 @@ export function createAuth(db: ReturnType<typeof getDb> = getDb()) {
     // (isGoogleAuthConfigured is also what hides the login form's Google
     // button, via getAuthOptionsFn). Unconfigured environments (local
     // dev by default, PR previews) don't register the provider at all.
-    socialProviders: isGoogleAuthConfigured()
-      ? {
-          google: {
-            clientId: runtimeEnv.GOOGLE_CLIENT_ID,
-            clientSecret: runtimeEnv.GOOGLE_CLIENT_SECRET,
-            enabled: true,
-            overrideUserInfoOnSignIn: true,
-          },
-        }
-      : {},
+    socialProviders,
 
     // Configure plugins
-    plugins: [
-      // Email OTP authentication (passwordless)
-      emailOTP({
-        otpLength: 6,
-        expiresIn: 300, // 5 minutes
-        async sendVerificationOTP({ email, otp, type }) {
-          if (type === 'sign-in') {
-            logger.info('Sending sign-in OTP', { email });
-            const result = await sendOtpEmail(email, otp);
-            if (!result.success) {
-              logger.error('Failed to send OTP:', { data: result.error });
-              throw new Error(result.error || 'Failed to send verification code');
-            }
-            logger.info('OTP sent successfully');
-          }
-        },
-      }),
-      lastLoginMethod({
-        cookieName: lastUsedLoginMethodCookieName(cookiePrefix),
-      }),
-      passkeyPlugin(),
-      // Device-code login for the public API (#1219, RFC 8628). The plugin
-      // owns the code lifecycle; `src/lib/api-v1/device-auth.ts` wraps it to
-      // hand back an API key instead of a session.
-      deviceAuthorization({
-        expiresIn: '10m',
-        interval: '5s',
-        // Must be absolute: the plugin resolves a relative URI against
-        // `baseURL`, which we leave request-derived (unset) — and server-side
-        // `auth.api.*` calls have no request. The /api/v1 wrapper re-derives
-        // the URL from the live request origin anyway (previews, local ports).
-        verificationUri: new URL(
-          DEVICE_VERIFICATION_PATH,
-          runtimeEnv.VITE_APP_URL || 'http://localhost:3000'
-        ).toString(),
-      }),
-      // Public-API authentication. `enableSessionForAPIKeys` makes the plugin
-      // resolve a full session for the key's owner whenever a request carries a
-      // key header — so the existing `getSession`/`requireUser` path works
-      // transparently for `/api/v1/*` without any bespoke key-hashing. Keys are
-      // prefixed `osk_` (OpenStory Key) and resolve to the creating user via
-      // `referenceId`; the team is derived downstream via `resolveUserTeam`.
-      apiKey({
-        enableSessionForAPIKeys: true,
-        defaultKeyLength: 64,
-        // Per-key rate limit: 10 requests/second. Enforced on every `/api/v1`
-        // request (via the session-from-key validation), stored per key. This
-        // is the abuse throttle, sized to comfortably allow normal create +
-        // status-poll traffic (incl. parallel per-sequence polls); per-team
-        // *cost* is separately bounded by the credit pre-flight in
-        // `createSequences`.
-        rateLimit: {
-          enabled: true,
-          maxRequests: 10,
-          timeWindow: 1000,
-        },
-        // Accept either `x-api-key: <key>` or the conventional
-        // `Authorization: Bearer <key>` header.
-        customAPIKeyGetter: (ctx) => {
-          const authHeader = ctx.headers?.get('authorization');
-          if (authHeader?.startsWith('Bearer ')) {
-            return authHeader.slice('Bearer '.length).trim();
-          }
-          return ctx.headers?.get('x-api-key') ?? null;
-        },
-      }),
-      // TanStack Start cookie integration - must be after all plugins that set cookies
-      // (emailOTP, passkey, lastLoginMethod)
-      tanstackStartCookies(),
-    ],
+    plugins,
 
     // Custom user fields to match existing schema, This is BetterAuth user table.
     user: {

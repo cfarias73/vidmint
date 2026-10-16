@@ -5,10 +5,7 @@ import {
   Layers,
   Sparkles,
   CheckCircle2,
-  ShieldCheck,
-  Zap,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 export function LandingBentoFeatures() {
   return (

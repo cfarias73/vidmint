@@ -11,6 +11,7 @@ import {
   restoreSequenceElementFn,
 } from '@/functions/sequence-elements';
 import { putToR2 } from '@/lib/utils/upload';
+import { runUploadStage } from '@/lib/storage/upload-stage';
 import { sceneKeys } from '@/hooks/use-scenes';
 import { shotStalenessNamespace } from '@/hooks/use-shot-staleness';
 import {
@@ -60,23 +61,31 @@ export function useUploadElementToSequence() {
       sequenceId: string;
       onProgress?: (percent: number) => void;
     }) => {
-      const presign = await presignElementUploadFn({
-        data: { filename: data.file.name, sequenceId: data.sequenceId },
-      });
-      await putToR2(
-        presign.uploadUrl,
-        data.file,
-        presign.contentType,
-        data.onProgress
+      const presign = await runUploadStage('Could not prepare upload', () =>
+        presignElementUploadFn({
+          data: { filename: data.file.name, sequenceId: data.sequenceId },
+        })
       );
-      const element = await finalizeElementUploadFn({
-        data: {
-          sequenceId: data.sequenceId,
-          publicUrl: presign.publicUrl,
-          path: presign.path,
-          filename: data.file.name,
-        },
-      });
+      await runUploadStage('File transfer failed', () =>
+        putToR2(
+          presign.uploadUrl,
+          data.file,
+          presign.contentType,
+          data.onProgress
+        )
+      );
+      const element = await runUploadStage(
+        'Could not save uploaded element',
+        () =>
+          finalizeElementUploadFn({
+            data: {
+              sequenceId: data.sequenceId,
+              publicUrl: presign.publicUrl,
+              path: presign.path,
+              filename: data.file.name,
+            },
+          })
+      );
       return element;
     },
     onSuccess: (_element, variables) => {
@@ -121,14 +130,16 @@ export function useUploadDraftElement() {
       onProgress?: (percent: number) => void;
       onAnalyzingChange?: (analyzing: boolean) => void;
     }): Promise<DraftElementUpload> => {
-      const presign = await presignDraftElementUploadFn({
-        data: { filename: data.file.name },
-      });
-      await putToR2(
-        presign.uploadUrl,
-        data.file,
-        presign.contentType,
-        data.onProgress
+      const presign = await runUploadStage('Could not prepare upload', () =>
+        presignDraftElementUploadFn({ data: { filename: data.file.name } })
+      );
+      await runUploadStage('File transfer failed', () =>
+        putToR2(
+          presign.uploadUrl,
+          data.file,
+          presign.contentType,
+          data.onProgress
+        )
       );
       data.onAnalyzingChange?.(true);
       let result: {
@@ -137,12 +148,14 @@ export function useUploadDraftElement() {
         suggestedToken: string;
       };
       try {
-        result = await analyzeDraftElementFn({
-          data: {
-            publicUrl: presign.publicUrl,
-            filename: data.file.name,
-          },
-        });
+        result = await runUploadStage('Image analysis failed', () =>
+          analyzeDraftElementFn({
+            data: {
+              publicUrl: presign.publicUrl,
+              filename: data.file.name,
+            },
+          })
+        );
       } finally {
         data.onAnalyzingChange?.(false);
       }

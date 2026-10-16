@@ -1,11 +1,4 @@
-import {
-  Edit3,
-  Clapperboard,
-  Sparkles,
-  ArrowRight,
-  Play,
-  Wand2,
-} from 'lucide-react';
+import { Edit3, Clapperboard, Sparkles, ArrowRight, Wand2 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 const STEPS = [

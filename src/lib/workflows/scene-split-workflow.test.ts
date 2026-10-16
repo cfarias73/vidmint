@@ -31,11 +31,11 @@ const triggerWorkflow =
   vi.fn<(path: string, body: unknown, options?: unknown) => Promise<string>>();
 vi.doMock('@/lib/workflow/client', () => ({ triggerWorkflow }));
 
-vi.doMock('@/lib/prompts', () => ({
-  getChatPrompt: vi.fn(() =>
+const getChatPrompt = vi.fn(
+  (_name: string, _variables: Record<string, string>) =>
     Promise.resolve({ messages: [{ role: 'user', content: 'go' }] })
-  ),
-}));
+);
+vi.doMock('@/lib/prompts', () => ({ getChatPrompt }));
 
 const emit = vi.fn(() => Promise.resolve());
 vi.doMock('@/lib/realtime', () => ({
@@ -470,6 +470,46 @@ describe('SceneSplitWorkflow stream step config', () => {
         ([params]) => params.observationName === 'phase-1-scene-bibles'
       )?.[0];
     expect(bibleCall?.model).toBe(INPUT.modelId);
+  });
+
+  test('uses metadata as context, not as a scene', async () => {
+    getChatPrompt.mockClear();
+    const projectContext =
+      'A. METADATA\nObjetivo pedagógico: reconocer colores.\n\n';
+    const source = `${projectContext}${SCRIPT}`;
+
+    const result = await makeWorkflow().split(
+      makeEvent({ ...INPUT, script: source }),
+      makeStep(),
+      makeScopedDb()
+    );
+
+    const sceneText = result.scenes
+      .map((scene) => scene.originalScript.extract)
+      .join('');
+    expect(sceneText).toBe(SCRIPT);
+    expect(getChatPrompt).toHaveBeenCalledTimes(2);
+    const gutteredScript = SCRIPT.split('\n')
+      .map((line, index) => `${index + 1}: ${line}`)
+      .join('\n');
+    for (const [name, variables] of getChatPrompt.mock.calls) {
+      expect(variables.script).toBe(gutteredScript);
+      if (name === 'phase/scene-bibles-chat') {
+        expect(variables.elements).toBe('(none)');
+      } else {
+        expect(Object.keys(variables)).toEqual(['script']);
+      }
+    }
+    const expectedContext = `<PROJECT_CONTEXT>Background only; do not treat this as a scene or extract first mentions from it.
+${projectContext}`;
+    const sceneCall = sceneSplittingLlmCalls()[0]?.[0];
+    expect(sceneCall?.messages[0]?.content).toContain(expectedContext);
+    const bibleCall = vi
+      .mocked(callLLMStream)
+      .mock.calls.find(
+        ([params]) => params.observationName === 'phase-1-scene-bibles'
+      )?.[0];
+    expect(bibleCall?.messages[0]?.content).toContain(expectedContext);
   });
 
   test('resolves the scenes-call key for SCENE_SPLIT_MODEL, not a Grok analysis model (#1358)', async () => {

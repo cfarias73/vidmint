@@ -91,16 +91,19 @@ export function isLocalRequestHost(request: Request): boolean {
   );
 }
 
+/** Resolve Google OAuth credentials only when both required secrets exist. */
+export function getGoogleAuthCredentials(env = getEnv()) {
+  const clientId = env.GOOGLE_CLIENT_ID;
+  const clientSecret = env.GOOGLE_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+  return { clientId, clientSecret };
+}
+
 /**
- * Is Google OAuth configured (GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET set)?
- * Single source of truth for Google sign-in availability: gates both the
- * better-auth socialProviders registration (src/lib/auth/config.ts) and the
- * login form's Google button (via getAuthOptionsFn). Environments
- * without the secrets — local dev by default, PR previews (whose hosts have
- * no registered OAuth redirect URIs, so the deploy workflow doesn't push
- * them) — simply don't offer Google.
+ * Single source of truth for Google sign-in availability: gates Better Auth's
+ * provider registration and the login form's Google button. Environments
+ * without credentials simply don't offer Google.
  */
 export function isGoogleAuthConfigured(): boolean {
-  const env = getEnv();
-  return Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+  return getGoogleAuthCredentials() !== null;
 }

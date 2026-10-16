@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Sparkles, Play, Film, Clapperboard, ArrowRight } from 'lucide-react';
+import { Play, Film, ArrowRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import type { Style } from '@/types/database';
-import { styleSlug } from '@/lib/style/style-slug';
-
-interface LandingShowcaseProps {
-  styles?: Style[];
-}
 
 const SHOWCASE_PRESETS = [
   {
@@ -68,11 +62,10 @@ const SHOWCASE_PRESETS = [
   },
 ];
 
-export function LandingShowcase({ styles = [] }: LandingShowcaseProps) {
-  const [activePresetId, setActivePresetId] = useState(SHOWCASE_PRESETS[0].id);
-  const activePreset =
-    SHOWCASE_PRESETS.find((p) => p.id === activePresetId) ||
-    SHOWCASE_PRESETS[0];
+export function LandingShowcase() {
+  const [activePresetId, setActivePresetId] = useState('cyberpunk');
+  const activePreset = SHOWCASE_PRESETS.find((p) => p.id === activePresetId);
+  if (!activePreset) return null;
 
   return (
     <section className="relative w-full py-20 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-zinc-950/40">

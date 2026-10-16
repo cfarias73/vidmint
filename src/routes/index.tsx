@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { publicStylesQueryOptions } from '@/lib/style/public-styles-query';
 import { LandingNavbar } from '@/components/landing/landing-navbar';
 import { LandingShowcase } from '@/components/landing/landing-showcase';
 import { LandingBentoFeatures } from '@/components/landing/landing-bento-features';
@@ -7,7 +6,6 @@ import { LandingHowItWorks } from '@/components/landing/landing-how-it-works';
 import { LandingPricingPreview } from '@/components/landing/landing-pricing-preview';
 import { LandingFooter } from '@/components/landing/landing-footer';
 import { ScriptView } from '@/components/script/script-view';
-import { useStyles } from '@/hooks/use-styles';
 import { useNavigate } from '@tanstack/react-router';
 import { Sparkles, Play, ArrowRight, Film } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,14 +20,11 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute('/')({
   validateSearch: searchSchema,
-  loader: ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(publicStylesQueryOptions),
   component: LandingRootPage,
 });
 
 function LandingRootPage() {
   const navigate = useNavigate();
-  const { data: styles } = useStyles();
 
   const handleSuccess = (sequenceIds: string[]) => {
     const [firstId] = sequenceIds;
@@ -143,7 +138,7 @@ function LandingRootPage() {
           </section>
 
           {/* Cinematic Showcase Section */}
-          <LandingShowcase styles={styles} />
+          <LandingShowcase />
 
           {/* Bento Grid Features */}
           <LandingBentoFeatures />

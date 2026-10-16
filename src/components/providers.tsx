@@ -9,7 +9,7 @@ import { PostHogProvider } from '@posthog/react';
 import type { QueryClient } from '@tanstack/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RealtimeContext, RealtimeProvider } from '@/lib/realtime/client';
-import { lazy, useEffect, useState, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 
 configureLogging();
 installChunkReload();

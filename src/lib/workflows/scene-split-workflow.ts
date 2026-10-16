@@ -54,6 +54,7 @@ import {
   sceneIndexForLine,
   type ResolvedBoundaries,
 } from '@/lib/ai/boundary-split';
+import { separateProjectContext } from '@/lib/ai/script-context';
 import {
   assembleScenes,
   createStreamingSceneParser,
@@ -140,6 +141,44 @@ const LOG_METADATA = { phase: PHASE.number, phaseName: PHASE.name };
 const BIBLES_STEP_NAME = 'scene-bibles';
 const BIBLES_PROMPT_NAME = 'phase/scene-bibles-chat';
 const BIBLES_LOG_NAME = `phase-${PHASE.number}-${BIBLES_STEP_NAME}`;
+
+/**
+ * Place a detected project-information preamble beside (not inside) the
+ * screenplay. Empty context returns the prompt unchanged, preserving existing
+ * request text and recorded aimock fixtures.
+ */
+function addProjectContext(
+  messages: ChatMessage[],
+  projectContext: string
+): ChatMessage[] {
+  if (!projectContext.trim()) return messages;
+
+  const block = [
+    '<PROJECT_CONTEXT>Background only; do not treat this as a scene or extract first mentions from it.',
+    projectContext,
+    '</PROJECT_CONTEXT>',
+    '',
+    '',
+  ].join('\n');
+
+  return messages.map((message) => {
+    if (message.role !== 'user' || typeof message.content !== 'string') {
+      return message;
+    }
+
+    const marker = '<USER_SCRIPT>';
+    const markerIndex = message.content.indexOf(marker);
+    const content =
+      markerIndex < 0
+        ? [message.content, '', block].join('\n')
+        : [
+            message.content.slice(0, markerIndex),
+            block,
+            message.content.slice(markerIndex),
+          ].join('');
+    return { ...message, content };
+  });
+}
 
 /**
  * Persist one analysis scene as a `scenes` row and its 1:1 shot, linked via
@@ -306,7 +345,9 @@ export class SceneSplitWorkflow extends OpenStoryWorkflowEntrypoint<SceneSplitWo
   ): Promise<SceneSplitWorkflowResult> {
     const input = event.payload;
     const { sequenceId, modelId, elements = [] } = input;
-    const script = input.script;
+    const { projectContext, sceneScript: script } = separateProjectContext(
+      input.script
+    );
 
     const elementsBlock =
       elements.length > 0
@@ -336,9 +377,11 @@ export class SceneSplitWorkflow extends OpenStoryWorkflowEntrypoint<SceneSplitWo
       'scene-splitting-stream',
       STREAM_STEP_RETRIES,
       async (): Promise<string> => {
-        const { messages } = await getChatPrompt(input.promptName, {
-          script: gutteredScript,
-        });
+        const { messages: rawMessages } = await getChatPrompt(
+          input.promptName,
+          { script: gutteredScript }
+        );
+        const messages = addProjectContext(rawMessages, projectContext);
 
         const llmKeyInfo =
           await scopedDb.credentials.resolveLlmKey(SCENE_SPLIT_MODEL);
@@ -648,10 +691,11 @@ export class SceneSplitWorkflow extends OpenStoryWorkflowEntrypoint<SceneSplitWo
     );
 
     const biblesStep = step.do(BIBLES_STEP_NAME, async (): Promise<string> => {
-      const { messages } = await getChatPrompt(BIBLES_PROMPT_NAME, {
-        script: gutteredScript,
-        elements: elementsBlock,
-      });
+      const { messages: rawMessages } = await getChatPrompt(
+        BIBLES_PROMPT_NAME,
+        { script: gutteredScript, elements: elementsBlock }
+      );
+      const messages = addProjectContext(rawMessages, projectContext);
       const llmKeyInfo = await scopedDb.credentials.resolveLlmKey(modelId);
 
       logger.info(

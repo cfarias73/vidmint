@@ -1,4 +1,4 @@
-import { Check, Sparkles, Zap, Shield, ArrowRight } from 'lucide-react';
+import { Check, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 const TIERS = [

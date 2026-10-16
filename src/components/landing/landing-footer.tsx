@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 import { OpenStoryLogo } from '@/components/icons/openstory-logo';
-import { LifeBuoy, BadgeDollarSign, Shield, Sparkles } from 'lucide-react';
 
 export function LandingFooter() {
   return (

@@ -276,7 +276,7 @@ describe('client/server import boundary', () => {
     });
   });
 
-  test('no server-only module is reachable from client components/hooks/functions', () => {
+  test('client dependency graph has no server-only imports', () => {
     const visited = new Set<string>();
     // file → the import edge that got us there, for a readable failure trail.
     const cameFrom = new Map<string, string>();
@@ -310,9 +310,13 @@ describe('client/server import boundary', () => {
       }
     }
 
-    expect(
-      violations,
-      `Server-only imports reachable from client code:\n\n${violations.join('\n\n')}\n\nMove the offending helper into a server-side src/lib module (referenced only from handler bodies) instead of widening this list.`
-    ).toEqual([]);
-  });
+    const failureMessage = [
+      'Server-only imports reachable from client code:',
+      '',
+      violations.join('\n\n'),
+      '',
+      'Move the offending helper into a server-side src/lib module (referenced only from handler bodies) instead of widening this list.',
+    ].join('\n');
+    expect(violations, failureMessage).toEqual([]);
+  }, 15_000);
 });

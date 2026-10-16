@@ -5,7 +5,7 @@ import {
   RESOLUTION_OPTIONS,
   type Resolution,
 } from '@/lib/constants/resolutions';
-import { ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import type { FC, ComponentProps } from 'react';
 
 type GenerationSettingsTriggerProps = {

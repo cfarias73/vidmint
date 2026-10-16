@@ -36,14 +36,14 @@ const vidmintTextSizes = {
   xl: 'text-3xl font-black tracking-tight',
 };
 
-export type VidmintLogoProps = React.HTMLAttributes<HTMLDivElement> &
+type VidmintLogoProps = React.HTMLAttributes<HTMLDivElement> &
   VariantProps<typeof vidmintLogoVariants>;
 
-export type VidmintIconProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+type VidmintIconProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 };
 
-export const VidmintIcon: React.FC<VidmintIconProps> = ({
+const VidmintIcon: React.FC<VidmintIconProps> = ({
   className,
   size = 'md',
   alt = 'Vidmint',
@@ -63,7 +63,7 @@ export const VidmintIcon: React.FC<VidmintIconProps> = ({
   );
 };
 
-export const VidmintLogo: React.FC<VidmintLogoProps> = ({
+const VidmintLogo: React.FC<VidmintLogoProps> = ({
   className,
   size = 'md',
   ...props
